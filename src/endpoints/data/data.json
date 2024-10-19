@@ -1,0 +1,41 @@
+[
+    {
+        "resources": "geral/clientes/",
+        "action": "ListarClientes",
+        "params": {
+            "pagina": 1,
+            "registros_por_pagina": 100,
+            "apenas_importado_api": "N"
+        },
+        "data_source": "clientes_cadastro"
+    },
+    {
+        "resources": "geral/categorias/",
+        "action": "ListarCategorias",
+        "params": {
+            "pagina": 1,
+            "registros_por_pagina": 100,
+            "apenas_importado_api": "N"
+        },
+        "data_source": "categoria_cadastro"
+    },
+    {
+        "resources": "geral/empresas/",
+        "action": "ListarEmpresas",
+        "params": {
+            "pagina": 1,
+            "registros_por_pagina": 100,
+            "apenas_importado_api": "N"
+        },
+        "data_source": "empresas_cadastro"
+    },
+    {
+        "resources": "geral/departamentos/",
+        "action": "ListarDepartamentos",
+        "params": {
+            "pagina": 1,
+            "registros_por_pagina": 100
+        },
+        "data_source": "departamentos"
+    }
+]
