@@ -9,18 +9,18 @@ class Endpoints:
     def __init__(self) -> None:
         self.path = "src/endpoints/data/data.json"
         self.endpoints = read_json(self.path)
-    def get(
+    def get_endpoint(
         self, 
         resource: Optional[str] = None, 
         action: Optional[str] = None) -> dict:
         if action:
             for endpoint in self.endpoints:
                 if endpoint.get("action") == action:
-                    return endpoint
+                    return [endpoint]
         elif resource:
             for endpoint in self.endpoints:
                 if endpoint.get("resources") == resource:
-                    return endpoint
+                    return [endpoint]
         else:
             raise Exception("Resource or action not found")
     def get_all(self) -> list:

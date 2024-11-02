@@ -37,5 +37,26 @@
             "registros_por_pagina": 100
         },
         "data_source": "departamentos"
+    },
+    {
+        "resources": "financas/mf/",
+        "action": "ListarMovimentos",
+        "params": {
+            "nPagina": 1,
+            "nRegPorPagina": 100
+        },
+        "data_source": "movimentos",
+        "total_of_pages_label": "nTotPaginas",
+        "records_label": "nRegistros"
+    },
+    {
+        "resources": "geral/contacorrente/",
+        "action": "ListarContasCorrentes",
+        "params": {
+            "pagina": 1,
+            "registros_por_pagina": 100,
+            "apenas_importado_api": "N"
+        },
+        "data_source": "ListarContasCorrentes"
     }
 ]
