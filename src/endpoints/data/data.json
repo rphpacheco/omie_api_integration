@@ -7,7 +7,8 @@
             "registros_por_pagina": 100,
             "apenas_importado_api": "N"
         },
-        "data_source": "clientes_cadastro"
+        "data_source": "clientes_cadastro",
+        "page_label": "pagina"
     },
     {
         "resources": "geral/categorias/",
@@ -17,7 +18,8 @@
             "registros_por_pagina": 100,
             "apenas_importado_api": "N"
         },
-        "data_source": "categoria_cadastro"
+        "data_source": "categoria_cadastro",
+        "page_label": "pagina"
     },
     {
         "resources": "geral/empresas/",
@@ -27,7 +29,8 @@
             "registros_por_pagina": 100,
             "apenas_importado_api": "N"
         },
-        "data_source": "empresas_cadastro"
+        "data_source": "empresas_cadastro",
+        "page_label": "pagina"
     },
     {
         "resources": "geral/departamentos/",
@@ -36,7 +39,8 @@
             "pagina": 1,
             "registros_por_pagina": 100
         },
-        "data_source": "departamentos"
+        "data_source": "departamentos",
+        "page_label": "pagina"
     },
     {
         "resources": "financas/mf/",
@@ -46,6 +50,7 @@
             "nRegPorPagina": 100
         },
         "data_source": "movimentos",
+        "page_label": "nPagina",
         "total_of_pages_label": "nTotPaginas",
         "records_label": "nRegistros"
     },
@@ -57,6 +62,7 @@
             "registros_por_pagina": 100,
             "apenas_importado_api": "N"
         },
-        "data_source": "ListarContasCorrentes"
+        "data_source": "ListarContasCorrentes",
+        "page_label": "pagina"
     }
 ]
