@@ -64,5 +64,16 @@
         },
         "data_source": "ListarContasCorrentes",
         "page_label": "pagina"
+    },
+    {
+        "resources": "financas/extrato/",
+        "action": "ListarExtrato",
+        "params": {
+            "nCodCC": 0,
+            "cCodIntCC": "", 
+            "dPeriodoInicial": "",
+            "dPeriodoFinal": ""
+        },
+        "pagination_type": "date_range"
     }
 ]

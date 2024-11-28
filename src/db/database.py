@@ -66,13 +66,14 @@ class Database:
         """
         existing_columns = self.get_columns_of_db(table_name)
         missing_columns = [col for col in df_columns if col not in existing_columns]
+        print("Missing columns:", missing_columns)
         with self.connection as connection:
             try:
-                transaction = connection.begin()
                 for column in missing_columns:
+                    transaction = connection.begin()
                     alter_query = text(f'ALTER TABLE {table_name} ADD COLUMN "{column}" TEXT;')
                     connection.execute(alter_query)
-                transaction.commit()
+                    transaction.commit()
                 
                 logger.info(f"The table '{table_name}' has been successfully updated.")
             except Exception as e:
