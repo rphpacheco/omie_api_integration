@@ -3,6 +3,8 @@ from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 
+from airflow.utils.task_group import TaskGroup
+
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
@@ -53,12 +55,26 @@ with DAG(
     
     endpoints = get_endpoints()
     
-    for endpoint in endpoints:
-        tasks = PythonOperator(
-            task_id=f"extract_and_load_{endpoint.get('action', None)}",
-            python_callable=get_cutomers,
-            op_kwargs={"endpoint": endpoint},
-            dag=dag
-        )
+    extract_endpoints = [e for e in endpoints if e.get("action") != "ListarExtrato"]
+    excluded_extract_endpoints = [e for e in endpoints if e.get("action") == "ListarExtrato"]
+    
+    with TaskGroup("extract_and_load_omie_entities") as extract_group:
+        for endpoint in extract_endpoints:
+            tasks = PythonOperator(
+                task_id=f"extract_and_load_{endpoint.get('action', None)}",
+                python_callable=get_cutomers,
+                op_kwargs={"endpoint": endpoint},
+                dag=dag
+            )
+    
+    with TaskGroup("extract_and_load_omie_second_flow") as extract_second_group:
+        for second_endpoint in excluded_extract_endpoints:
+            second_tasks = PythonOperator(
+                task_id=f"extract_and_load_{second_endpoint.get('action', None)}",
+                python_callable=get_cutomers,
+                op_kwargs={"endpoint": second_endpoint},
+                dag=dag
+            )
+        
 
-        start >> tasks >> end
+    start >> extract_group >> extract_second_group >> end
