@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from src.config import Settings
@@ -9,10 +10,12 @@ settings = Settings()
 def get_body_params_pagination(
     action: str, 
     params: dict, 
-    page: int, 
-    field_pagination: str
+    page: Optional[int] = None, 
+    field_pagination: Optional[str] = None
 ) -> dict:
-    params[field_pagination] = page | 1
+    if field_pagination:
+        params[field_pagination] = page
+        
     return {
         "call": action,
         "app_key": settings.APP_KEY,
@@ -45,3 +48,29 @@ def get_total_of_pages(
     total_of_pages = response.get(total_of_pages_label, 0)
     
     return total_of_pages
+
+def generate_date_range(start_date_str: str):
+    def add_month(data):
+        new_month = data.month + 1
+        new_year = data.year
+        if new_month > 12:
+            new_month = 1
+            new_year += 1
+        
+        return data.replace(month=new_month, year=new_year)
+    
+    start_date = datetime.strptime(start_date_str, "%d/%m/%Y")
+    start_date = start_date.replace(day=1)
+    # "25/01/2025" -> "01/01/2025"
+    # ["01/01/2025", "01/02/2025"]
+    
+    today = datetime.today()
+    
+    date_list = []
+    
+    current_date = start_date
+    while current_date <= today:
+        date_list.append(current_date.strftime("%d/%m/%Y"))
+        current_date = add_month(current_date)
+        
+    return date_list

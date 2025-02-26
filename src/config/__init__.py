@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     DB_USERNANE: str
     DB_PASSWORD: str
     DB_NAME: str
+    DATE_INIT: str = "01/01/2025"
     
     class Config:
         env_file='.env'

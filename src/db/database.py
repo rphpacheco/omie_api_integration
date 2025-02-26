@@ -67,17 +67,15 @@ class Database:
         existing_columns = self.get_columns_of_db(table_name)
         missing_columns = [col for col in df_columns if col not in existing_columns]
         print("Missing columns:", missing_columns)
-        with self.connection as connection:
-            try:
+        try:
+            with self.engine.begin() as connection:
                 for column in missing_columns:
-                    transaction = connection.begin()
                     alter_query = text(f'ALTER TABLE {table_name} ADD COLUMN "{column}" TEXT;')
                     connection.execute(alter_query)
-                    transaction.commit()
                 
-                logger.info(f"The table '{table_name}' has been successfully updated.")
-            except Exception as e:
-                logger.error(f"An error occurred while updating the table '{table_name}': {e}")
+                logger.success(f"The table '{table_name}' has been successfully updated.")
+        except Exception as e:
+            logger.error(f"An error occurred while updating the table '{table_name}': {e}")
 
     def save_into_db(self, page: int, resource: str, content: dict):
         """
@@ -93,7 +91,19 @@ class Database:
             any new columns in the content before appending data.
         """
         table_name = resource.split("/")[-2]
-        df = pd.json_normalize(content)
+        
+        if isinstance(content, dict):
+            for key, value in content.items():
+                if isinstance(value, list) and value and isinstance(value[0], dict):
+                    parent_keys = [k for k in content.keys() if k != key]
+                    
+                    df = pd.json_normalize(
+                        content,
+                        record_path=key,
+                        meta=parent_keys
+                    )
+        else:
+            df = pd.json_normalize(content)
 
         try:
             if page == 1:
@@ -102,6 +112,20 @@ class Database:
                 self.update_table_structure(table_name, df.columns)
                 df.to_sql(table_name, self.engine, if_exists='append', index=False)
 
-            logger.info(f"Page {page} has been successfully saved in the table '{table_name}'.")
+            logger.success(f"Page {page} has been successfully saved in the table '{table_name}'.")
         except Exception as e:
             logger.error(f"An error occurred while saving the table '{table_name}': {e}")
+            
+    def select_from_table(self, table_name: str, distinct_column: str = None):
+        try:
+            if distinct_column:
+                query = text(f'SELECT DISTINCT "{distinct_column}" FROM {table_name}')
+                result = self.connection.execute(query)
+                return [row[0] for row in result]
+            else:
+                query = text(f"SELECT * FROM {table_name}")
+                result = self.connection.execute(query)
+                return [dict(row) for row in result]
+        except Exception as e:
+            logger.error(f"An error occurred while selecting from the table '{table_name}': {e}")
+            return None

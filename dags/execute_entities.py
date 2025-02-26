@@ -3,6 +3,8 @@ from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 
+from loguru import logger
+
 from airflow.utils.task_group import TaskGroup
 
 default_args = {
@@ -29,16 +31,49 @@ def get_cutomers(endpoint: dict):
     records_label = endpoint.get("records_label", "registros")
     
     pagination = PaginationController()
-    pagination = pagination.pagination(
-        type=pagination_type,
-        resource=resource,
-        action=action,
-        params=params,
-        data_source=data_source,
-        page_label=page_label,
-        total_of_pages_label=total_of_pages_label,
-        records_label=records_label
-    )
+    
+    if pagination_type == "date_range":
+        depends_on = endpoint.get("depends_on", None)
+        
+        if depends_on:
+            from src.db.database import Database
+            db = Database()
+            
+            try:
+                accounts = db.select_from_table(
+                    table_name=depends_on,
+                    distinct_column="nCodCC"
+                )
+            except Exception as e:
+                logger.error(f"An error occurred while selecting from the table '{depends_on}': {e}")
+            
+            for account in accounts:
+                params["nCodCC"] = account
+                
+                try:
+                    pagination.pagination(
+                        type=pagination_type,
+                        resource=resource,
+                        action=action,
+                        params=params,
+                        data_source=data_source
+                    )
+                except Exception as e:
+                    logger.error(f"An error occurred while pagination: {e}")
+    else:
+        try:
+            pagination.pagination(
+                type=pagination_type,
+                resource=resource,
+                action=action,
+                params=params,
+                data_source=data_source,
+                page_label=page_label,
+                total_of_pages_label=total_of_pages_label,
+                records_label=records_label
+            )
+        except Exception as e:
+            logger.error(f"An error occurred while pagination: {e}")
     
 
 with DAG(
