@@ -77,5 +77,17 @@
         "data_source": "listaMovimentos",
         "pagination_type": "date_range",
         "depends_on": "contacorrente"
+    },
+    {
+        "resources": "geral/produtos/",
+        "action": "ListarProdutos",
+        "params": {
+            "pagina": 1,
+            "registros_por_pagina": 100,
+            "apenas_importado_api": "N",
+            "filtrar_apenas_omiepdv": "N"
+        },
+        "data_source": "produto_servico_cadastro",
+        "page_label": "pagina"
     }
 ]
