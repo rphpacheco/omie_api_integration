@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     BASE_URL: str
     DB_HOST: str
     DB_PORT: int
-    DB_USERNANE: str
+    DB_USERNAME: str
     DB_PASSWORD: str
     DB_NAME: str
     DATE_INIT: str = "01/01/2025"

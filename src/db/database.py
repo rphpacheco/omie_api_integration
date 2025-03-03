@@ -30,7 +30,7 @@ class Database:
         Returns:
             sqlalchemy.engine.base.Engine: An engine instance to connect with the PostgreSQL database.
         """
-        connection_string = f"postgresql://{settings.DB_USERNANE}:{settings.DB_PASSWORD}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
+        connection_string = f"postgresql://{settings.DB_USERNAME}:{settings.DB_PASSWORD}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
         engine = create_engine(connection_string)
         return engine
 
@@ -67,15 +67,18 @@ class Database:
         existing_columns = self.get_columns_of_db(table_name)
         missing_columns = [col for col in df_columns if col not in existing_columns]
         print("Missing columns:", missing_columns)
-        try:
-            with self.engine.begin() as connection:
+        with self.engine.connect() as connection:
+            try:
                 for column in missing_columns:
-                    alter_query = text(f'ALTER TABLE {table_name} ADD COLUMN "{column}" TEXT;')
+                    transaction = connection.begin()
+                    alter_query = text(
+                        f'ALTER TABLE {table_name} ADD COLUMN "{column}" TEXT;'
+                    )
                     connection.execute(alter_query)
-                
-                logger.success(f"The table '{table_name}' has been successfully updated.")
-        except Exception as e:
-            logger.error(f"An error occurred while updating the table '{table_name}': {e}")
+                    transaction.commit()
+                logger.success(f"Table {table_name} updated successfully")
+            except Exception as e:
+                logger.error(f"Error updating table {table_name}: {e}")
 
     def save_into_db(self, page: int, resource: str, content: dict):
         """
@@ -106,16 +109,16 @@ class Database:
             df = pd.json_normalize(content)
 
         try:
+            connection_string = f"postgresql://{settings.DB_USERNAME}:{settings.DB_PASSWORD}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
             if page == 1:
-                df.to_sql(table_name, self.engine, if_exists='replace', index=False)
+                df.to_sql(table_name, connection_string, if_exists="replace", index=False)
             else:
                 self.update_table_structure(table_name, df.columns)
-                df.to_sql(table_name, self.engine, if_exists='append', index=False)
-
-            logger.success(f"Page {page} has been successfully saved in the table '{table_name}'.")
+                df.to_sql(table_name, connection_string, if_exists="append", index=False)
+            logger.success(f"Page {page} saved into table {table_name}")
         except Exception as e:
-            logger.error(f"An error occurred while saving the table '{table_name}': {e}")
-            
+            logger.error(f"Error saving data into table {table_name}: {e}")
+
     def select_from_table(self, table_name: str, distinct_column: str = None):
         try:
             if distinct_column:
@@ -127,5 +130,5 @@ class Database:
                 result = self.connection.execute(query)
                 return [dict(row) for row in result]
         except Exception as e:
-            logger.error(f"An error occurred while selecting from the table '{table_name}': {e}")
+            logger.error(f"Error selecting data from table {table_name}: {e}")
             return None

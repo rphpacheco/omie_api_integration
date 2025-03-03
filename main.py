@@ -2,7 +2,7 @@ from src.endpoints import Endpoints
 from src.controllers.paginations import PaginationController
 
 endpoints = Endpoints()
-endpoints = endpoints.get_endpoint(action="ListarClientes")
+endpoints = endpoints.get_endpoint(action="ListarResumoContasCorrentes")
 
 for endpoint in endpoints:
     resource = endpoint.get("resources", None)

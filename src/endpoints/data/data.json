@@ -89,5 +89,16 @@
         },
         "data_source": "produto_servico_cadastro",
         "page_label": "pagina"
-    }
+    },
+    {
+        "resources": "geral/contacorrente/",
+        "action": "ListarResumoContasCorrentes",
+        "params": {
+            "pagina": 1,
+            "registros_por_pagina": 100,
+            "apenas_importado_api": "N"
+        },
+        "data_source": "conta_corrente_lista",
+        "page_label": "pagina"
+    }      
 ]
