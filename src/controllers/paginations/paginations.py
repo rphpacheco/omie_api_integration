@@ -28,7 +28,7 @@ class PaginationController:
                 page=page, 
                 field_pagination=page_label
             )
-            
+          
             api = Api(
                 url=f"{settings.BASE_URL}{resource}",
                 headers=HEADERS,
@@ -36,7 +36,7 @@ class PaginationController:
                 params=params
             )
             response = api.request(api.post)
-            
+
             records_fetched = response.get(records_label, 0)
             contents = response.get(data_source, [])
             

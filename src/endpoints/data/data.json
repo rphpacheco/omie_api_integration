@@ -100,5 +100,30 @@
         },
         "data_source": "conta_pagar_cadastro",
         "page_label": "pagina"
-    }      
+    },
+    {
+        "resources": "financas/contareceber/",
+        "action": "ListarContasReceber",
+        "params": {
+            "pagina": 1,
+            "registros_por_pagina": 100,
+            "apenas_importado_api": "N"
+        },
+        "data_source": "conta_receber_cadastro",
+        "page_label": "pagina"
+    },
+    {
+        "resources": "financas/pesquisartitulos/",
+        "action": "PesquisarLancamentos",
+        "params": {
+            "nPagina": 1,
+            "nRegPorPagina": 100
+        },
+        "data_source": "titulosEncontrados",
+        "page_label": "nPagina",
+        "total_of_pages_label": "nTotPaginas",
+        "records_label": "nRegistros"
+    }
+    
+
 ]
