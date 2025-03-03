@@ -91,14 +91,14 @@
         "page_label": "pagina"
     },
     {
-        "resources": "geral/contacorrente/",
-        "action": "ListarResumoContasCorrentes",
+        "resources": "financas/contapagar/",
+        "action": "ListarContasPagar",
         "params": {
             "pagina": 1,
             "registros_por_pagina": 100,
             "apenas_importado_api": "N"
         },
-        "data_source": "conta_corrente_lista",
+        "data_source": "conta_pagar_cadastro",
         "page_label": "pagina"
     }      
 ]
