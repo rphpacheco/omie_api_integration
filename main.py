@@ -1,5 +1,5 @@
-from src.endpoints import Endpoints
 from src.controllers.paginations import PaginationController
+from src.endpoints import Endpoints
 
 endpoints = Endpoints()
 endpoints = endpoints.get_all()
@@ -13,7 +13,7 @@ for endpoint in endpoints:
     page_label = endpoint.get("page_label", None)
     total_of_pages_label = endpoint.get("total_of_pages_label", None)
     records_label = endpoint.get("records_label", "registros")
- 
+
     pagination = PaginationController()
     pagination = pagination.pagination(
         type=pagination_type,
@@ -23,6 +23,5 @@ for endpoint in endpoints:
         data_source=data_source,
         page_label=page_label,
         total_of_pages_label=total_of_pages_label,
-        records_label=records_label
-        
+        records_label=records_label,
     )

@@ -70,7 +70,7 @@
         "action": "ListarExtrato",
         "params": {
             "nCodCC": 0,
-            "cCodIntCC": "", 
+            "cCodIntCC": "",
             "dPeriodoInicial": "",
             "dPeriodoFinal": ""
         },
@@ -124,6 +124,6 @@
         "total_of_pages_label": "nTotPaginas",
         "records_label": "nRegistros"
     }
-    
+
 
 ]

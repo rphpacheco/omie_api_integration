@@ -97,4 +97,4 @@ self.max_workers = 5  # Number of concurrent workers
 - Added SQLAlchemy connection pooling
 - Updated pandas data type handling
 - Added concurrent.futures for parallel processing
-- Enhanced logging with loguru 
+- Enhanced logging with loguru

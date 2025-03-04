@@ -1,13 +1,15 @@
+from typing import Callable, Union
+
 import requests
-from typing import Union, Callable
-from urllib3.util.retry import Retry
+from loguru import logger
 from requests.adapters import HTTPAdapter
 from requests.exceptions import RequestException
-from loguru import logger
+from urllib3.util.retry import Retry
 
 
 class Session:
     """Manages HTTP session with retry mechanism."""
+
     def __init__(self) -> None:
         self._session = requests.Session()
         self.retry = Retry(
@@ -16,15 +18,16 @@ class Session:
             total=5,
             backoff_factor=1,
             status_forcelist=[429, 500, 502, 503, 504],
-            allowed_methods=['GET', 'POST', 'PUT', 'DELETE'],
-            respect_retry_after_header=True
+            allowed_methods=["GET", "POST", "PUT", "DELETE"],
+            respect_retry_after_header=True,
         )
         self.adapter = HTTPAdapter(max_retries=self.retry)
-        self._session.mount('http://', self.adapter)
-        self._session.mount('https://', self.adapter)
+        self._session.mount("http://", self.adapter)
+        self._session.mount("https://", self.adapter)
 
     def get(self) -> Union[requests.Session, None]:
         return self._session
+
 
 class Api:
     def __init__(
@@ -43,7 +46,7 @@ class Api:
         self.proxies = proxies
         self.session = Session().get()
         self.timeout = 30
-        
+
     def get(self) -> Union[requests.Response, None]:
         response = self.session.get(
             url=self.url,
@@ -66,7 +69,7 @@ class Api:
             timeout=self.timeout,
         )
         return response
-    
+
     def put(self) -> Union[requests.Response, None]:
         response = self.session.put(
             url=self.url,
