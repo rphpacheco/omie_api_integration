@@ -1,3 +1,1 @@
-HEADERS = {
-    'Content-Type': 'application/json'
-}
+HEADERS = {"Content-Type": "application/json"}
