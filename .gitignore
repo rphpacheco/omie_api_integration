@@ -164,3 +164,4 @@ cython_debug/
 #.idea/
 link.pem
 .gitignore
+.pre-commit-config.yaml

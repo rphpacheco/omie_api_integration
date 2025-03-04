@@ -120,6 +120,7 @@ class Database:
                 df = pd.json_normalize(content)
 
             # Convert numeric columns to appropriate types
+            # TODO: Add more numeric columns to the list or make it dynamic
             numeric_columns = [
                 'nSaldo', 'nValorDocumento', 'nSaldoAnterior', 'nSaldoAtual',
                 'nSaldoConciliado', 'nSaldoProvisorio', 'nLimiteCreditoTotal',
